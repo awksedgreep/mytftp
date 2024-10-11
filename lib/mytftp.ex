@@ -9,13 +9,18 @@ defmodule Mytftp do
   end
 
   @impl true
+  @spec read(any(), any(), any(), any(), {any(), any()}) ::
+          :done | {:ok, binary(), {binary(), any()}}
   def read(_request, pos, _len, _client, _data = {_str, size}) when pos > size do
     :done
   end
+
+  @impl true
   def read(_request, pos, len, _client, data = {str, size}) when pos + len > size do
-     {:ok, :erlang.binary_part(str, pos, size - pos), data}
+    {:ok, :erlang.binary_part(str, pos, size - pos), data}
   end
 
+  @impl true
   def read(_request, pos, len, _client, data = {str, _size}) do
     {:ok, :erlang.binary_part(str, pos, len), data}
   end
